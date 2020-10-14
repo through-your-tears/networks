@@ -11,10 +11,10 @@ void main() {
 	const unsigned short int id = 1;
 	string s;
 	while (1) {
-		ofstream g("C:/Users/Dmitriy/source/repos/client0/client0", ios_base::app);
+		ofstream g("message.txt", ios_base::app);
+		cout << "lastname, weight, height";
 		getline(cin, s);
-		g << "Клиент №: " << id << "\n";
-		while (s != " ") { //фамилия имя рост вес
+		while (s != " ") {
 			g << s << "\n";
 			getline(cin, s);
 		}
