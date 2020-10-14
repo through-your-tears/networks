@@ -1,7 +1,11 @@
+// server0.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
+//
+
 #include <fstream>
-#include <list>
+#include <vector>
 #include <string>
 #include <cstdlib>
+#include <cstdio>
 
 using namespace std;
 
@@ -11,7 +15,7 @@ private:
 	int weight, height;
 public:
 	int k = 0;
-	Student (string name0 = " ", string surname0 = " ", int weight0 = 0, int height0 = 0){
+	Student(string name0 = " ", string surname0 = " ", int weight0 = 0, int height0 = 0) {
 		name = name0;
 		surname = surname0;
 		weight = weight0;
@@ -45,17 +49,20 @@ public:
 };
 
 void main() {
-	list <Student> students;
+	vector <Student> students;
 	int prev = 0;
+	const unsigned short int id = 0;
 	int k = 0;
-	ifstream f("transport.txt");
 	while (1) {
+		ifstream f("C:/Users/Dmitriy/source/repos/client0/Debug/transport.txt");
 		string s;
 		while (getline(f, s) && k <= prev) {
 			k++;
 		}
 		--k;
+		bool flag = 0;
 		while (getline(f, s)) {
+			flag = 1;
 			int i = 0;
 			string str;
 			Student st;
@@ -75,7 +82,7 @@ void main() {
 						int p = pow(10, str.length() - 1);
 						int sum = 0;
 						for (char a0 : str) {
-							string m(1, a);
+							string m(1, a0);
 							const char* ps = m.c_str();
 							sum += atoi(ps) * p;
 							p /= 10;
@@ -86,7 +93,7 @@ void main() {
 						int p = pow(10, str.length() - 1);
 						int sum = 0;
 						for (char a0 : str) {
-							string m(1, a);
+							string m(1, a0);
 							const char* ps = m.c_str();
 							sum += atoi(ps) * p;
 							p /= 10;
@@ -98,10 +105,26 @@ void main() {
 			students.push_back(st);
 			prev++;
 		}
-		ofstream g("list_of_students.txt");
-		for (auto it = students.begin(); it != students.end(); ++it) {
-			//вывод в файл списка
+		f.close();
+		ofstream g("C:/Users/Dmitriy/source/repos/client0/Debug", ios_base::app);
+		if (flag) {
+			g << "Server:" << "\n" << "changes saved " << "\n";
 		}
+		/*for (auto it = students.begin(); it != students.end(); ++it) {
+			Student student = *it;
+			g << id << ' ' << student.getSurname << ' ' << student.getName << ' ' << student.getWeight << ' ' << student.setHeight;
+		}*/
+		g.close();
 	}
-
 }
+
+// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
+// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
+
+// Советы по началу работы 
+//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
+//   2. В окне Team Explorer можно подключиться к системе управления версиями.
+//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
+//   4. В окне "Список ошибок" можно просматривать ошибки.
+//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
+//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
