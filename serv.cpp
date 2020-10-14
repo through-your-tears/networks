@@ -72,12 +72,13 @@ void main() {
 				patients.push_back(patient);
 			}
 			h.close();
+			ofstream g("output.txt");
+			for (int i = 0; i < patients.size() - 1; ++i) {
+				g << patients[i].getLastname() << " " << patients[i].normOfDevel() << "\n";
+			}
+			g.close();
+			prev = k;
 		}
-		ofstream g("output.txt");
-		for (Patient patient : patients) {
-			g << patient.getLastname() << " " << patient.normOfDevel() << "\n";
-		}
-		g.close();
 	}
 }
 
