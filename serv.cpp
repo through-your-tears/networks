@@ -1,6 +1,7 @@
-// server0.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
+// server.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -9,24 +10,18 @@
 
 using namespace std;
 
-class Student {
+class Patient {
 private:
-	string name, surname;
+	string lastname;
 	int weight, height;
 public:
-	int k = 0;
-	Student(string name0 = " ", string surname0 = " ", int weight0 = 0, int height0 = 0) {
-		name = name0;
-		surname = surname0;
+	Patient(string lastname0 = " ", int weight0 = 0, int height0 = 0) {
+		lastname = lastname0;
 		weight = weight0;
 		height = height0;
-		k++;
 	}
-	void setName(string name0) {
-		name = name0;
-	}
-	void setSurname(string surname0) {
-		surname = surname0;
+	void setLastname(string lastname0) {
+		lastname = lastname0;
 	}
 	void setWeight(int weight0) {
 		weight = weight0;
@@ -34,11 +29,8 @@ public:
 	void setHeight(int height0) {
 		height = height0;
 	}
-	string getName() {
-		return name;
-	}
-	string getSurname() {
-		return surname;
+	string getLastname() {
+		return lastname;
 	}
 	int getWeight() {
 		return weight;
@@ -46,74 +38,45 @@ public:
 	int getHeight() {
 		return height;
 	}
+	string normOfDevel() {
+		if (height - weight >= 100 && height - weight <= 115) {
+			return "normal";
+		}
+		else if (height - weight < 100) {
+			return "excess";
+		}
+		else {
+			return "lack";
+		}
+	}
 };
 
 void main() {
-	vector <Student> students;
 	int prev = 0;
-	const unsigned short int id = 0;
-	int k = 0;
 	while (1) {
-		ifstream f("C:/Users/Dmitriy/source/repos/client0/Debug/transport.txt");
+		int k = 0;
+		ifstream f("C:/Users/Dmitri/source/repos/client/client/message.txt");
 		string s;
-		while (getline(f, s) && k <= prev) {
+		while (getline(f, s)) {
 			k++;
 		}
-		--k;
-		bool flag = 0;
-		while (getline(f, s)) {
-			flag = 1;
-			int i = 0;
-			string str;
-			Student st;
-			for (char a : s) {
-
-				if (a != ' ') {
-					str += a;
-				}
-				else {
-					if (i == 0) {
-						st.setSurname(str);
-					}
-					else if (i == 1) {
-						st.setName(str);
-					}
-					else if (i == 2) {
-						int p = pow(10, str.length() - 1);
-						int sum = 0;
-						for (char a0 : str) {
-							string m(1, a0);
-							const char* ps = m.c_str();
-							sum += atoi(ps) * p;
-							p /= 10;
-						}
-						st.setWeight(sum);
-					}
-					else {
-						int p = pow(10, str.length() - 1);
-						int sum = 0;
-						for (char a0 : str) {
-							string m(1, a0);
-							const char* ps = m.c_str();
-							sum += atoi(ps) * p;
-							p /= 10;
-						}
-						st.setHeight(sum);
-					}
-				}
-			}
-			students.push_back(st);
-			prev++;
-		}
+		vector <Patient> patients;
 		f.close();
-		ofstream g("C:/Users/Dmitriy/source/repos/client0/Debug", ios_base::app);
-		if (flag) {
-			g << "Server:" << "\n" << "changes saved " << "\n";
+		if (k > prev) {
+			ifstream h("C:/Users/Dmitri/source/repos/client/client/message.txt");
+			while (!h.eof()) {
+				string lastname;
+				int weight, height;
+				h >> lastname >> weight >> height;
+				Patient patient(lastname, weight, height);
+				patients.push_back(patient);
+			}
+			h.close();
 		}
-		/*for (auto it = students.begin(); it != students.end(); ++it) {
-			Student student = *it;
-			g << id << ' ' << student.getSurname << ' ' << student.getName << ' ' << student.getWeight << ' ' << student.setHeight;
-		}*/
+		ofstream g("output.txt");
+		for (Patient patient : patients) {
+			g << patient.getLastname() << " " << patient.normOfDevel() << "\n";
+		}
 		g.close();
 	}
 }
