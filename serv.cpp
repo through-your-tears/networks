@@ -7,10 +7,11 @@
 #include <string>
 #include <cstdlib>
 #include <cstdio>
+#include <sstream>
 
 using namespace std;
 
-class Patient {
+struct Patient {
 private:
 	string lastname;
 	int weight, height;
@@ -52,32 +53,39 @@ public:
 };
 
 void main() {
-	int prev = 0;
+	int prev[10] = { 0 };
 	while (1) {
-		int k = 0;
-		ifstream f("C:/Users/Dmitri/source/repos/client/client/message.txt");
-		string s;
-		while (getline(f, s)) {
-			k++;
-		}
-		vector <Patient> patients;
-		f.close();
-		if (k > prev) {
-			ifstream h("C:/Users/Dmitri/source/repos/client/client/message.txt");
-			while (!h.eof()) {
-				string lastname;
-				int weight, height;
-				h >> lastname >> weight >> height;
-				Patient patient(lastname, weight, height);
-				patients.push_back(patient);
+		for (int id = 0; id < 2; ++id) {
+			int k = 0;
+			char* cid;
+			stringstream ss;
+			ss << id;
+			string charid = ss.str();
+			string file = "C:/Users/Dmitriy/source/repos/client" + charid + "/client" + charid + "/message.txt";
+			ifstream f(file);
+			string s;
+			while (getline(f, s)) {
+				k++;
 			}
-			h.close();
-			ofstream g("output.txt");
-			for (int i = 0; i < patients.size() - 1; ++i) {
-				g << patients[i].getLastname() << " " << patients[i].normOfDevel() << "\n";
+			vector <Patient> patients;
+			f.close();
+			if (k > prev[id]) {
+				ifstream h("C:/Users/Dmitriy/source/repos/client" + charid + "/client" + charid + "/message.txt");
+				while (!h.eof()) {
+					string lastname;
+					int weight, height;
+					h >> lastname >> weight >> height;
+					Patient patient(lastname, weight, height);
+					patients.push_back(patient);
+				}
+				h.close();
+				ofstream g("output" + charid + ".txt");
+				for (int i = 0; i < patients.size() - 1; ++i) {
+					g << patients[i].getLastname() << " " << patients[i].normOfDevel() << "\n";
+				}
+				g.close();
+				prev[id] = k;
 			}
-			g.close();
-			prev = k;
 		}
 	}
 }
